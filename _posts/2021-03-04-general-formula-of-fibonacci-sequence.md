@@ -107,5 +107,5 @@ References:
 U of Toronto. \\
 [3] <a href="https://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci Number</a>,
 <a href="https://en.wikipedia.org/wiki/Generating_function">Generating Function</a>,
-<a href="https://en.wikipedia.org/wiki/Introduction_to_Algorithms">CLRS</a>, Wikipedia.
+<a href="https://en.wikipedia.org/wiki/Introduction_to_Algorithms">CLRS</a>, Wikipedia. \\
 [4] Introduction to algorithms. Cambridge, Mass: MIT Press.
