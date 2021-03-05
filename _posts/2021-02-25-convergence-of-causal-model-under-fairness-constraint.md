@@ -65,11 +65,11 @@ merits(Figure 2):
   Figure 2
 </p>
 
-This extends the observations and experimental results in (<a href="https://arxiv.org/abs/1901.10912">Yoshua et
-al., 2019</a>) under fairness setting, and achieved expected results.
+This extends the observations and experimental results in <a href="https://arxiv.org/abs/1901.10912">Yoshua et
+al., 2019</a> under fairness setting, and achieved expected results.
 
 ------------------------------------------------------------------------
 1.Given dataset with size m, defined as $\sum_{i=1}^m logP(a_i, b_i, y_i, c_i)$:<br />
 For model 1: $\sum_{i=1}^{m} logP(A=a_i)+logP(B=b_i|A=a_i)+logP(Y=y_i|B=b_i)+logP(C=c_i|Y=y_i)$<br />
 For model 2: $\sum_{i=1}^{m} logP(A=a_i)+logP(C=c_i)+logP(Y=y_i|A=a_i,B=b_i)$}<br />
-2.Defined as: {$|(P(Y=1|A=0)-P(Y=1|A=1))|$}
+2.Defined as: {$|(P(Y=1|A=0)-P(Y=1|A=1)|$}
