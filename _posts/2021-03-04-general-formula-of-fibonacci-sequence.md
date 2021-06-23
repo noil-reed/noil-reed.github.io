@@ -100,7 +100,7 @@ F_i &= \frac{1}{\sqrt{5}} (\phi^i - \hat{\phi^i}) \\
 $$
 
 ------------------------------------------------------------------------
-References:
+Reference(s):
 
 [1] <a href="https://walkccc.me/CLRS/">CLRS Solutions</a>. \\
 [2] <a name="reference_2" href="http://www.math.toronto.edu/mnica/csplash.pdf">Generating Functions</a>,
