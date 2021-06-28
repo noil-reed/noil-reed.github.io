@@ -8,12 +8,14 @@ usemathjax: true
 ---
 
 ## Kernel Density Estimation
-Kernel density estimation, as known as KDE, is a classic algorithm belongs to <a href="https://en.wikipedia.org/wiki/Nonparametric_statistics">Nonparametric Statistics</a>. The target of KDE is to estimate a distribution given some observations without a closed-form assumption. <a href="https://en.wikipedia.org/wiki/Kernel_(statistics)">Kernel Function</a> is required for KDE, a kernel function is essentially a probabilistic mass function, but in this scenario used for estimating an unknown distribution. In most cases, it'll be good if kernel function have two properties: *normalization*: $\int_{-\infty}^{\infty} K(u) du = 1$, and *symmetry*: $K(u) = -K(u)$. \\
+Kernel density estimation, as known as KDE, is a classic algorithm belonging to <a href="https://en.wikipedia.org/wiki/Nonparametric_statistics">Nonparametric statistics</a>. The objective of KDE is to estimate a distribution given some observations without a closed-form assumption. <a href="https://en.wikipedia.org/wiki/Kernel_(statistics)">Kernel function</a> is required for KDE, a kernel function is essentially a probabilistic mass function, but in this scenario used for estimating an unknown distribution. In most cases, it'll be good if kernel function have two properties:
+1. **normalization**: $\int_{-\infty}^{\infty} K(u) du = 1$
+2. **symmetry**: $K(u) = -K(u)$. \\
 Imagine we have $D=\\{x_{1}, x_{2}, ... ,x_{n}\\}$, a set of observations of random variable $X$. We want to guess probability distribution of $X$ over kernel function $K$, then using KDE, probability mass at point $x$ is estimated as $\widehat{P}(X=x)=\frac{1}{nh}\Sigma_{i}^{n} K(\frac{x-x_{i}}{h})$, there $h$ is a hyperparameter named *bandwidth* that controls how $D$ influences $\widehat{P}$, $\frac{1}{nh}$ is a normalization term to make sure $\int_{-\infty}^{\infty} \widehat{P}(X=u)du = \int_{-\infty}^{\infty} K(u)du$, then easy to realize that when $K$ is normalized, $\widehat{P}$ is normalized as well!
 
 ------------------------------------------------------------------------
 ## Implementation
-Although there are several nice KDE implementations in Julia, like <a href="https://github.com/JuliaStats/KernelDensity.jl.git">KernelDensity.jl</a> and <a href="https://github.com/JuliaRobotics/KernelDensityEstimate.jl">KernelDensityEstimate.jl</a>. I feel is it necessary to have another implementation during I tried to implement <a href="https://arxiv.org/abs/1807.01774">BOHB</a>(check another <a href="">note</a> of mine!). Because although very remarkable, they don't support several needed features very well:
+Although there are several nice KDE implementations in Julia, like <a href="https://github.com/JuliaStats/KernelDensity.jl.git">KernelDensity.jl</a> and <a href="https://github.com/JuliaRobotics/KernelDensityEstimate.jl">KernelDensityEstimate.jl</a>. I feel is it necessary to have another implementation during I tried to implement <a href="https://arxiv.org/abs/1807.01774">BOHB</a>. Because although very remarkable, they don't support several needed features very well:
 
 1. **Lazy Evaluation**: We don't want to evaluate the whole density when initialize it. Instead, when initialize, we want to just keep the data on file without any calculation, then evaluate $\widehat{P}(X=\hat{x})$ on a specific $\hat{x}$ only when we need it. This is because in BOHB, the observations can change frequently as the algorithm evolves. An entire evaluation should be unnecessary and time-wasting.
 2. **Multidimension**: BOHB is a <a href="https://en.wikipedia.org/wiki/Hyperparameter_optimization">hyperparameter optimization</a> algorithm that using <a href="https://papers.nips.cc/paper/2011/file/86e8f7ab32cfd12577bc2619bc635690-Paper.pdf">Tree Parzen Estimator</a>. When sampling hyperparameters, it splits the already evaluated hyperparameters half-and-half with respect to their performance. Then we fit two KDEs over them: KDE-good, which uses better performance half and KDE-bad, which uses worser performance half. Note that all the observations are combination of hyperparameters so we need to treat the KDE as a multi-dimensional function. Here we use <a href="http://csyue.nccu.edu.tw/ch/Kernel%20Estimation(Ref).pdf">product kernel</a> refers to the implementation of <a href="https://github.com/statsmodels/statsmodels">statsmodels</a>. The original paper of BOHB mentioned they used this library.
@@ -22,18 +24,18 @@ Although there are several nice KDE implementations in Julia, like <a href="http
 
 ------------------------------------------------------------------------
 
-## DEMOs <a href="https://nbviewer.jupyter.org/github/noil-reed/notebooks/blob/main/KDE_visualization.ipynb">[Code]</a>
+## DEMOs <a href="https://github.com/noil-reed/notebooks/blob/main/MultiKDE_demo/demo.ipynb">[Code]</a>
 
 <p align="center">
-  <img src="/assets/post-images/kde/kde_1d.png">
+  <img src="https://raw.githubusercontent.com/noil-reed/notebooks/842a60e81bad431dd70c6e04eb93f82ff10c1cda/MultiKDE_demo/dim1.svg">
   <br/>
-  Demo 1: KDE visualization over 700 random observations from $\mathcal{N}(0, 1)$ using <a href="http://pages.stat.wisc.edu/~mchung/teaching/MIA/reading/diffusion.gaussian.kernel.pdf.pdf">gaussian kernel</a>, with difference bandwidths. A smaller $h$ makes the curve fluctuated and more sensitive to observations, and vice versa.
+  Demo 1: KDE visualization over 50 random observations from $\mathcal{N}(0, 1)$ using <a href="http://pages.stat.wisc.edu/~mchung/teaching/MIA/reading/diffusion.gaussian.kernel.pdf.pdf">gaussian kernel</a>, with difference bandwidths. A smaller $h$ makes the curve fluctuated and more sensitive to observations, and vice versa.
 </p>
 
 <p align="center">
-  <img src="/assets/post-images/kde/kde_2d.png">
+  <img src="https://raw.githubusercontent.com/noil-reed/notebooks/842a60e81bad431dd70c6e04eb93f82ff10c1cda/MultiKDE_demo/dim2.svg">
   <br/>
-  Demo 2: Same setting as above, 2-dimensional version.
+  Demo 2: Same setting as above, but 2-dimensional $\mathcal N(\begin{bmatrix} 0\\0 \end{bmatrix}, diag(2))$ version.
 </p>
 
 
